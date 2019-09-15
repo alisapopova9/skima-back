@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const mongoose = require('mongoose');
 
-const Marathon = require('../models/marathons').Marathon;
+const Marathon = require('../models/marathon').Marathon;
 
 router.get('/', async (request, response, next) => {
     try {

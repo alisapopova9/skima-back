@@ -7,6 +7,7 @@ const mongoose = require('mongoose');
 require('dotenv').config();
 
 const marathonRoutes = require('./routes/marathons');
+const userRoutes = require('./routes/users');
 
 let app = express();
 
@@ -16,6 +17,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use('/api/marathons', marathonRoutes);
+app.use('/api/users', userRoutes);
 
 mongoose.connect("mongodb://localhost:27017/skimaapi",
     { useNewUrlParser: true},
