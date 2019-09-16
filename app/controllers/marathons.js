@@ -1,4 +1,4 @@
-let Marathons = require('../models/marathons');
+let Marathons = require('../models/marathon');
 
 // module.exports.getAll = function(request, response) {
 //     Marathons.getAll(function (err, data) {

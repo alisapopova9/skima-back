@@ -4,9 +4,16 @@ const bodyParser = require('body-parser');
 const ObjectID = require('mongodb').ObjectID;
 const mongoose = require('mongoose');
 
-require('dotenv').config();
+const dotenv = require('dotenv');
+
+const res = dotenv.config();
+if (res.error) {
+    console.error(res.error);
+    return;
+}
 
 const marathonRoutes = require('./routes/marathons');
+const userRoutes = require('./routes/users');
 
 let app = express();
 
@@ -16,6 +23,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use('/api/marathons', marathonRoutes);
+app.use('/api/users', userRoutes);
 
 mongoose.connect("mongodb://localhost:27017/skimaapi",
     { useNewUrlParser: true},
