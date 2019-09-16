@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const mongoose = require('mongoose');
 const bcrypt =require('bcrypt');
+const jwt = require('jsonwebtoken');
 
 const User = require('../models/user').User;
 
@@ -37,6 +38,55 @@ router.post('/signup', async (request, response, next) => {
     } catch (e) {
         console.log(e);
     }
+});
+
+router.post('/login', async (request, response, next) => {
+    try {
+        const doc = await User.find({ email: request.body.email }).exec();
+        if (doc.length < 1) {
+            return response.status(401).json({
+                message: "Auth failed: user with such email doesn't exist"
+            });
+        }
+        const match = await bcrypt.compare(request.body.password, doc[0].password);
+        if (match) {
+            console.log(process.env.JWT_KEY);
+            const token =  jwt.sign({
+                userId: doc[0]._id,
+                email: doc[0].email,
+            },
+            process.env.JWT_KEY,
+            {
+                expiresIn: "1h",
+            });
+            return response.status(200).json({
+                message: "Auth successful",
+                token: token,
+            })
+        }
+        else {
+            return response.status(401).json({
+                message: "Auth failed: wrong password",
+            });
+        }
+    } catch (e) {
+        response.status(500).json({
+            error: e,
+        })
+    }
+});
+
+router.delete('/:userId', async (request, response, next) => {
+   try {
+       const result = await User.deleteOne({ _id: request.params.userId }).exec();
+       response.status(200).json({
+           message: 'User was successfully deleted',
+       })
+   } catch (e) {
+       response.status(500).json({
+           error: e,
+       })
+   }
 });
 
 module.exports = router;
