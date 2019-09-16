@@ -50,7 +50,6 @@ router.post('/login', async (request, response, next) => {
         }
         const match = await bcrypt.compare(request.body.password, doc[0].password);
         if (match) {
-            console.log(process.env.JWT_KEY);
             const token =  jwt.sign({
                 userId: doc[0]._id,
                 email: doc[0].email,
