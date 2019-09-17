@@ -2,6 +2,8 @@ const express = require('express');
 const router = express.Router();
 const mongoose = require('mongoose');
 
+const checkAuth = require('../middleware/check-auth');
+
 const Marathon = require('../models/marathon').Marathon;
 
 router.get('/', async (request, response, next) => {
@@ -13,7 +15,7 @@ router.get('/', async (request, response, next) => {
     }
 });
 
-router.post('/', async (request, response, next) => {
+router.post('/', checkAuth, async (request, response, next) => {
     let marathon = new Marathon();
     marathon._id = new mongoose.Types.ObjectId();
     marathon.title = request.body.title;
