@@ -24,6 +24,8 @@ router.post('/signup', async (request, response, next) => {
                     user = new User({
                         _id: new mongoose.Types.ObjectId(),
                         email: request.body.email,
+                        firstname: request.body.firstname,
+                        lastname: request.body.lastname,
                         password: hash,
                     });
                     const result = await user.save();
@@ -53,6 +55,7 @@ router.post('/login', async (request, response, next) => {
             const token =  jwt.sign({
                 userId: doc[0]._id,
                 email: doc[0].email,
+                firstname: doc[0].firstname,
             },
             process.env.JWT_KEY,
             {
